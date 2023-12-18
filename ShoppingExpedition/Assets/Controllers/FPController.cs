@@ -13,12 +13,13 @@ public class FPController : MonoBehaviour
 {
     private Vector3 TargetVelocity = new Vector3(0f,0f,0f);
     private Vector3 CurrVelocity = new Vector3(0f,0f,0f);
-    private float MoveSpeed = 12f;
-    private float LookSpeed = 3f;
+    [SerializeField] private float MoveSpeed = 3f;
+    [SerializeField] private float LookSpeed = 3f;
     private Vector2 CurrLookRotation = new Vector2(0f,0f);
     private Rigidbody rb;
     [SerializeField] private GameObject camroot;
 
+    [SerializeField] private bool canDash = true;
     private bool isDashing = false;
     private float dashTimer = 0f;
     private float dashDuration = 0.15f;
@@ -55,7 +56,7 @@ public class FPController : MonoBehaviour
             }
         }
         else {
-            if(Input.GetButtonDown("Fire3")) {
+            if(Input.GetButtonDown("Fire3") && canDash) {
                 isDashing = true;
                 dashTimer = dashDuration;
                 dashVector = ((transform.right * Input.GetAxis("Horizontal")) + (transform.forward * Input.GetAxis("Vertical"))).normalized * dashSpeed;
@@ -64,8 +65,8 @@ public class FPController : MonoBehaviour
             if(camAnimator) {
                 camAnimator.SetFloat("runSpeed", CurrVelocity.magnitude);
             }
-            // rb.velocity = (transform.right * CurrVelocity.x) + (transform.forward * CurrVelocity.z);
-            rb.AddForce((transform.right * CurrVelocity.x) + (transform.forward * CurrVelocity.z) - rb.velocity);
+            rb.velocity = (transform.right * CurrVelocity.x) + (transform.forward * CurrVelocity.z);
+            // rb.AddForce((transform.right * CurrVelocity.x) + (transform.forward * CurrVelocity.z) - rb.velocity);
         }
     }
 
